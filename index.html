@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Highly Available Web Application Sprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0B0F17;
+    --panel: #121826;
+    --border: #232B3D;
+    --ink: #E7ECF3;
+    --ink-muted: #8592A8;
+    --green: #3DDC97;
+    --gold: #F2C14E;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.55;
+  }
+
+  .mono { font-family: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace; }
+
+  .wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* Header */
+  header {
+    padding: 1.75rem 0 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  header .wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+  header span {
+    font-weight: 600;
+    font-size: 1.02rem;
+    letter-spacing: 0.01em;
+  }
+
+  /* Hero */
+  .hero { padding: 3rem 0 2rem; }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.32rem 0.75rem 0.32rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: var(--green);
+  }
+  .dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 0 3px rgba(61, 220, 151, 0.18);
+  }
+  .hero h1 {
+    font-size: clamp(1.9rem, 4vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin: 1.1rem 0 0.75rem;
+    max-width: 20ch;
+  }
+  .hero p {
+    color: var(--ink-muted);
+    max-width: 54ch;
+    margin: 0;
+    font-size: 1.02rem;
+  }
+
+  /* Served-by panel -- the actual payoff, made visually dominant */
+  .served {
+    margin: 0.5rem 0 2.2rem;
+    padding: 1.6rem 1.7rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--panel);
+  }
+  .served .label {
+    font-size: 0.82rem;
+    color: var(--ink-muted);
+    margin-bottom: 0.5rem;
+  }
+  .served .id {
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+    color: var(--gold);
+    font-weight: 500;
+    word-break: break-all;
+  }
+  .served .zone {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.9rem;
+    padding: 0.3rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: var(--ink);
+  }
+  .served .zone svg { flex: none; }
+
+  .refresh-note {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin: 1.3rem 0 0;
+    padding-top: 1.2rem;
+    border-top: 1px dashed var(--border);
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+  }
+  .refresh-note svg { flex: none; }
+
+  /* Secondary details */
+  .details { padding: 0 0 3rem; }
+  .details h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink-muted);
+    margin: 0 0 0.9rem;
+  }
+  .grid {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--panel);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 11rem 1fr;
+    gap: 1rem;
+    padding: 0.85rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .row:last-child { border-bottom: none; }
+  .row .label {
+    color: var(--ink-muted);
+    font-size: 0.92rem;
+  }
+  .row .value {
+    color: var(--gold);
+    font-size: 0.92rem;
+    word-break: break-all;
+  }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 0 2.5rem;
+    color: var(--ink-muted);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 520px) {
+    .row { grid-template-columns: 1fr; gap: 0.2rem; }
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <div class="wrap">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="4" y="4" width="16" height="6" rx="1.4" stroke="#3DDC97" stroke-width="1.6"/>
+        <rect x="4" y="14" width="16" height="6" rx="1.4" stroke="#3DDC97" stroke-width="1.6"/>
+        <circle cx="7.2" cy="7" r="0.9" fill="#3DDC97"/>
+        <circle cx="7.2" cy="17" r="0.9" fill="#3DDC97"/>
+      </svg>
+      <span>Highly Available Web Application Sprint</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <section class="hero">
+      <div class="pill"><span class="dot"></span>Online</div>
+      <h1>Two servers behind one load balancer.</h1>
+      <p>
+        You reached this page through the ALB, not an instance directly.
+        It routed you here:
+      </p>
+    </section>
+
+    <div class="served">
+      <div class="label">Served by instance</div>
+      <div class="id mono">{{INSTANCE_ID}}</div>
+      <div class="zone">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 3L21 8V16L12 21L3 16V8L12 3Z" stroke="#3DDC97" stroke-width="1.6" stroke-linejoin="round"/>
+        </svg>
+        <span class="mono">{{AVAILABILITY_ZONE}}</span>
+      </div>
+      <div class="refresh-note">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 12C4 7.6 7.6 4 12 4C15 4 17.6 5.7 19 8.2M20 12C20 16.4 16.4 20 12 20C9 20 6.4 18.3 5 15.8" stroke="#8592A8" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M19 4V8.2H14.8M5 20V15.8H9.2" stroke="#8592A8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Refresh the page — the load balancer may route you to the other server.
+      </div>
+    </div>
+
+    <section class="details">
+      <h2>Instance details</h2>
+      <div class="grid">
+        <div class="row">
+          <div class="label">Instance type</div>
+          <div class="value mono">{{INSTANCE_TYPE}}</div>
+        </div>
+        <div class="row">
+          <div class="label">Region</div>
+          <div class="value mono">{{REGION}}</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="wrap">
+    Deployed via EC2 User Data — Highly Available Web Application Sprint
+  </footer>
+
+</body>
+</html>
